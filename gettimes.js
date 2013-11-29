@@ -5,6 +5,7 @@ WorkerScript.onMessage = function(message) {
     var msg;
     var parsedMsg;
     var formattedMsg = "";
+    var stopTimes = new Array;
 
     xmlHttp.open("GET", "http://localhost/ap.php?action=gettimes&station=" + stopName, true);
     xmlHttp.send(null);
@@ -17,25 +18,24 @@ WorkerScript.onMessage = function(message) {
         parsedMsg = eval("(" + msg + ")");
 
         if (typeof parsedMsg != "undefined") {
-            formattedMsg += "<b><u>Inbound</u></b><br>";
+
+            while (parsedMsg.inbound.length < 3) {
+                parsedMsg.inbound.push("");
+            }
 
             for (var i = 0; i < parsedMsg.inbound.length; i++) {
-                formattedMsg += parsedMsg.inbound[i].dest;
-                formattedMsg += ": ";
-                formattedMsg += parsedMsg.inbound[i].time;
-                formattedMsg += "<br>";
+                stopTimes.push(parsedMsg.inbound[i].dest + ": " + parsedMsg.inbound[i].time);
             }
 
-            formattedMsg += "<br><b><u>Outbound</u></b><br>";
+            while (parsedMsg.outbound.length < 3) {
+                parsedMsg.outbound.push("");
+            }
 
             for (var i = 0; i < parsedMsg.outbound.length; i++) {
-                formattedMsg += parsedMsg.outbound[i].dest;
-                formattedMsg += ": ";
-                formattedMsg += parsedMsg.outbound[i].time;
-                formattedMsg += "<br>";
+                stopTimes.push(parsedMsg.outbound[i].dest + ": " + parsedMsg.outbound[i].time);
             }
 
-            WorkerScript.sendMessage({'reply': formattedMsg});
+            WorkerScript.sendMessage({'reply': stopTimes});
         }
     }
 }
