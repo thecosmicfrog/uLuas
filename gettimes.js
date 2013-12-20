@@ -4,10 +4,10 @@ WorkerScript.onMessage = function(message) {
     var xmlHttp = new XMLHttpRequest();
     var msg;
     var parsedMsg;
-    var formattedMsg = "";
     var stopTimes = new Array;
 
-    xmlHttp.open("GET", "http://localhost/ap.php?action=gettimes&station=" + stopName, true);
+    // Query a hosted Luas API script. Returns JSON object of times for the given stop.
+    xmlHttp.open("GET", "http://ks3290596.kimsufi.com/luas-api.php?action=gettimes&station=" + stopName, true);
     xmlHttp.send(null);
 
     xmlHttp.onreadystatechange = function() {
@@ -18,7 +18,6 @@ WorkerScript.onMessage = function(message) {
         parsedMsg = eval("(" + msg + ")");
 
         if (typeof parsedMsg != "undefined") {
-
             while (parsedMsg.inbound.length < 3) {
                 parsedMsg.inbound.push("");
             }

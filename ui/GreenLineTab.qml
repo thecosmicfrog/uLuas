@@ -28,26 +28,14 @@ Tab {
                 fill: parent
             }
 
-            Image {
-                id: logo
-                source: "../img/uluas_logo.png"
-                width: parent.width
-                fillMode: Image.PreserveAspectFit
-                smooth: true
-            }
-
             ListItem.ItemSelector {
                 id: stopSelector
-                text: "<h2>Select Stop</h2>"
-                containerHeight: units.gu(28)
+                text: "<h2>Select Stop:</h2>"
+                containerHeight: units.gu(25)
                 expanded: true
                 onSelectedIndexChanged: myWorker.sendMessage({'stop': slugify(greenLineModel.get(stopSelector.selectedIndex).name)})
                 model: greenLineModel
                 delegate: OptionSelectorDelegate { text: name; subText: description; icon: image }
-
-                anchors {
-                    top: logo.bottom
-                }
             }
 
             ListModel {
