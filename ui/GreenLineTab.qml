@@ -18,14 +18,25 @@ Tab {
                 outboundTime1Label.text = String(getArray(messageObject.reply)[3])
                 outboundTime2Label.text = String(getArray(messageObject.reply)[4])
                 outboundTime3Label.text = String(getArray(messageObject.reply)[5])
+
+                activityIndicator.running = false
             }
         }
 
         Column {
             spacing: units.gu(1)
+
             anchors {
                 margins: units.gu(2)
                 fill: parent
+            }
+
+            ActivityIndicator {
+                id: activityIndicator
+
+                // Align activity indicator to the right.
+                anchors.left: parent.left
+                LayoutMirroring.enabled: true
             }
 
             ListItem.ItemSelector {
@@ -33,9 +44,13 @@ Tab {
                 text: "<h2>Select Stop:</h2>"
                 containerHeight: units.gu(25)
                 expanded: true
-                onSelectedIndexChanged: myWorker.sendMessage({'stop': slugify(greenLineModel.get(stopSelector.selectedIndex).name)})
                 model: greenLineModel
                 delegate: OptionSelectorDelegate { text: name; subText: description; icon: image }
+
+                onSelectedIndexChanged: {
+                    activityIndicator.running = true
+                    myWorker.sendMessage({'stop': slugify(greenLineModel.get(stopSelector.selectedIndex).name)})
+                }
             }
 
             ListModel {
