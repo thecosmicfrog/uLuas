@@ -45,7 +45,7 @@ Tab {
                 ListElement { name: "Charlemont"; description: ""; image: "../img/bicycle.png" }
                 ListElement { name: "Ranelagh"; description: ""; image: "../img/bicycle.png" }
                 ListElement { name: "Beechwood"; description: ""; image: "../img/bicycle.png" }
-                ListElement { name: "Cowper"; description: "Alight for Connolly"; image: "../img/bicycle.png" }
+                ListElement { name: "Cowper"; description: ""; image: "../img/bicycle.png" }
                 ListElement { name: "Milltown"; description: ""; image: "../img/bicycle.png" }
                 ListElement { name: "Windy Arbour"; description: ""; image: "../img/bicycle.png" }
                 ListElement { name: "Dundrum"; description: ""; image: "../img/bicycle.png" }
@@ -69,7 +69,7 @@ Tab {
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
-                color: "darkblue"
+                color: "#100054"
 
                 anchors {
                     top: stopSelector.bottom
@@ -79,6 +79,8 @@ Tab {
                 Label {
                     text: "<b>Inbound</b>"
                     color: "white"
+
+                    anchors.centerIn: parent
                 }
             }
 
@@ -97,6 +99,8 @@ Tab {
                 Label {
                     id: inboundTime1Label
                     text: ""
+                    x: parent.x + 6
+                    y: parent.x + 5
                 }
             }
 
@@ -115,6 +119,8 @@ Tab {
                 Label {
                     id: inboundTime2Label
                     text: ""
+                    x: parent.x + 6
+                    y: parent.x + 5
                 }
             }
 
@@ -133,6 +139,8 @@ Tab {
                 Label {
                     id: inboundTime3Label
                     text: ""
+                    x: parent.x + 6
+                    y: parent.x + 5
                 }
             }
 
@@ -141,7 +149,7 @@ Tab {
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
-                color: "darkblue"
+                color: "#100054"
 
                 anchors {
                     top: inboundTime3.bottom
@@ -151,6 +159,8 @@ Tab {
                 Label {
                     text: "<b>Outbound</b>"
                     color: "white"
+
+                    anchors.centerIn: parent
                 }
             }
 
@@ -169,6 +179,8 @@ Tab {
                 Label {
                     id: outboundTime1Label
                     text: ""
+                    x: parent.x + 6
+                    y: parent.x + 5
                 }
             }
 
@@ -187,6 +199,8 @@ Tab {
                 Label {
                     id: outboundTime2Label
                     text: ""
+                    x: parent.x + 6
+                    y: parent.x + 5
                 }
             }
 
@@ -205,6 +219,8 @@ Tab {
                 Label {
                     id: outboundTime3Label
                     text: ""
+                    x: parent.x + 6
+                    y: parent.x + 5
                 }
             }
         }

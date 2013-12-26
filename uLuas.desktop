@@ -1,9 +1,8 @@
 [Desktop Entry]
 Name=uLuas
-Comment=Luas Dublin light rail app for Ubuntu Touch
+Comment=Luas Dublin light rail app for Ubuntu Touch.
 Exec=/usr/bin/qmlscene $@ /usr/share/uLuas/uLuas.qml
-Icon=qmlscene
+Icon=uluas_logo.png
 Terminal=false
 Type=Application
 X-Ubuntu-Touch=true
-Name[en_IE]=uLuas.desktop
