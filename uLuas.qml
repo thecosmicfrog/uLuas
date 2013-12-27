@@ -1,15 +1,10 @@
 import QtQuick 2.0
 import Ubuntu.Components 0.1
-import Ubuntu.Components.Pickers 0.1
 import "ui"
 
 MainView {
     applicationName: "org.thecosmicfrog.uluas"
 
-    /*
-     This property enables the application to change orientation
-     when the device is rotated. The default is false.
-    */
     //automaticOrientation: true
 
     width: units.gu(65)
