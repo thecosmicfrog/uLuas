@@ -1,3 +1,4 @@
 .excludes
 manifest.json
 uLuas.qmlproject.user
+/tests
