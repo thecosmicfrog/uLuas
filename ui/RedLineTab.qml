@@ -1,7 +1,6 @@
 import QtQuick 2.0
 import Ubuntu.Components 0.1
 import Ubuntu.Components.ListItems 0.1 as ListItem
-import Ubuntu.Components.Popups 0.1
 
 Tab {
     title: i18n.tr("Red Line")
@@ -318,41 +317,7 @@ Tab {
             }
         }
 
-        tools: ToolbarItems {
-            ToolbarButton {
-                id: aboutButton
-
-                action: Action {
-                    text: "About"
-                    iconSource: "../img/about_icon.svg"
-                    onTriggered: PopupUtils.open(aboutComponent, aboutButton)
-                }
-            }
-
-            Component {
-                id: aboutComponent
-
-                Popover {
-                    id: aboutPopover
-
-                    Label {
-                        text: "<p>Real-time tram stop information for Dublin's Luas light rail service.</p><br>
-                               <p><a href=\"https://www.github.com/thecosmicfrog/uluas\">
-                               https://www.github.com/thecosmicfrog/uluas</a></p>"
-                        wrapMode: Text.WordWrap
-
-                        onLinkActivated: {
-                            Qt.openUrlExternally(link)
-                        }
-
-                        anchors {
-                            left: parent.left
-                            right: parent.right
-                            margins: units.gu(1)
-                        }
-                    }
-                }
-            }
+        tools: GlobalTools {
         }
     }
 }
