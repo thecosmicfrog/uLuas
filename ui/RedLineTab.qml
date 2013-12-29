@@ -12,24 +12,28 @@ Tab {
 
         WorkerScript {
             id: queryStopTimesWorker
-            source: "../gettimes.js"
+            source: "../js/gettimes.js"
 
             onMessage: {
-                inboundTime1Label.text = String(getArray(messageObject.reply)[0])
-                inboundTime2Label.text = String(getArray(messageObject.reply)[1])
-                inboundTime3Label.text = String(getArray(messageObject.reply)[2])
+                inboundStop1Name.text = String(getArray(messageObject.reply)[0][0])
+                inboundStop1Time.text = String(getArray(messageObject.reply)[0][1])
+                inboundStop2Name.text = String(getArray(messageObject.reply)[1][0])
+                inboundStop2Time.text = String(getArray(messageObject.reply)[1][1])
+                inboundStop3Name.text = String(getArray(messageObject.reply)[2][0])
+                inboundStop3Time.text = String(getArray(messageObject.reply)[2][1])
 
-                outboundTime1Label.text = String(getArray(messageObject.reply)[3])
-                outboundTime2Label.text = String(getArray(messageObject.reply)[4])
-                outboundTime3Label.text = String(getArray(messageObject.reply)[5])
+                outboundStop1Name.text = String(getArray(messageObject.reply)[3][0])
+                outboundStop1Time.text = String(getArray(messageObject.reply)[3][1])
+                outboundStop2Name.text = String(getArray(messageObject.reply)[4][0])
+                outboundStop2Time.text = String(getArray(messageObject.reply)[4][1])
+                outboundStop3Name.text = String(getArray(messageObject.reply)[5][0])
+                outboundStop3Time.text = String(getArray(messageObject.reply)[5][1])
 
                 activityIndicator.running = false
             }
         }
 
-        Column {
-            spacing: units.gu(1)
-
+        Item {
             anchors {
                 margins: units.gu(2)
                 fill: parent
@@ -114,7 +118,7 @@ Tab {
             }
 
             UbuntuShape {
-                id: inboundTime1
+                id: inboundStop1
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
@@ -126,49 +130,76 @@ Tab {
                 }
 
                 Label {
-                    id: inboundTime1Label
+                    id: inboundStop1Name
                     text: ""
+                    width: parent.width / 2
+                    anchors.leftMargin: 6
                     x: parent.x + 6
+                    y: parent.x + 5
+                }
+
+                Label {
+                    id: inboundStop1Time
+                    text: ""
+                    anchors.left: inboundStop1Name.right
                     y: parent.x + 5
                 }
             }
 
             UbuntuShape {
-                id: inboundTime2
+                id: inboundStop2
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
                 color: "white"
 
                 anchors {
-                    top: inboundTime1.bottom
+                    top: inboundStop1.bottom
                     topMargin: units.gu(0)
                 }
 
                 Label {
-                    id: inboundTime2Label
+                    id: inboundStop2Name
                     text: ""
+                    width: parent.width / 2
+                    anchors.leftMargin: 6
                     x: parent.x + 6
+                    y: parent.x + 5
+                }
+
+                Label {
+                    id: inboundStop2Time
+                    text: ""
+                    anchors.left: inboundStop2Name.right
                     y: parent.x + 5
                 }
             }
 
             UbuntuShape {
-                id: inboundTime3
+                id: inboundStop3
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
                 color: "white"
 
                 anchors {
-                    top: inboundTime2.bottom
+                    top: inboundStop2.bottom
                     topMargin: units.gu(0)
                 }
 
                 Label {
-                    id: inboundTime3Label
+                    id: inboundStop3Name
                     text: ""
+                    width: parent.width / 2
+                    anchors.leftMargin: 6
                     x: parent.x + 6
+                    y: parent.x + 5
+                }
+
+                Label {
+                    id: inboundStop3Time
+                    text: ""
+                    anchors.left: inboundStop3Name.right
                     y: parent.x + 5
                 }
             }
@@ -181,7 +212,7 @@ Tab {
                 color: "#100054"
 
                 anchors {
-                    top: inboundTime3.bottom
+                    top: inboundStop3.bottom
                     topMargin: units.gu(0)
                 }
 
@@ -194,7 +225,7 @@ Tab {
             }
 
             UbuntuShape {
-                id: outboundTime1
+                id: outboundStop1
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
@@ -206,49 +237,76 @@ Tab {
                 }
 
                 Label {
-                    id: outboundTime1Label
+                    id: outboundStop1Name
                     text: ""
+                    width: parent.width / 2
+                    anchors.leftMargin: 6
                     x: parent.x + 6
+                    y: parent.x + 5
+                }
+
+                Label {
+                    id: outboundStop1Time
+                    text: ""
+                    anchors.left: outboundStop1Name.right
                     y: parent.x + 5
                 }
             }
 
             UbuntuShape {
-                id: outboundTime2
+                id: outboundStop2
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
                 color: "white"
 
                 anchors {
-                    top: outboundTime1.bottom
+                    top: outboundStop1.bottom
                     topMargin: units.gu(0)
                 }
 
                 Label {
-                    id: outboundTime2Label
+                    id: outboundStop2Name
                     text: ""
+                    width: parent.width / 2
+                    anchors.leftMargin: 6
                     x: parent.x + 6
+                    y: parent.x + 5
+                }
+
+                Label {
+                    id: outboundStop2Time
+                    text: ""
+                    anchors.left: outboundStop2Name.right
                     y: parent.x + 5
                 }
             }
 
             UbuntuShape {
-                id: outboundTime3
+                id: outboundStop3
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
                 color: "white"
 
                 anchors {
-                    top: outboundTime2.bottom
+                    top: outboundStop2.bottom
                     topMargin: units.gu(0)
                 }
 
                 Label {
-                    id: outboundTime3Label
+                    id: outboundStop3Name
                     text: ""
+                    width: parent.width / 2
+                    anchors.leftMargin: 6
                     x: parent.x + 6
+                    y: parent.x + 5
+                }
+
+                Label {
+                    id: outboundStop3Time
+                    text: ""
+                    anchors.left: outboundStop3Name.right
                     y: parent.x + 5
                 }
             }

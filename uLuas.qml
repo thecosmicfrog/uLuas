@@ -14,8 +14,6 @@ MainView {
         var arr = [];
 
         for (var i = 0; i < obj.length; i++) {
-            if (obj[i] === "undefined: undefined")
-                obj[i] = "";
             arr.push(obj[i]);
         }
 
