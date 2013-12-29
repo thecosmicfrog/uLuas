@@ -10,6 +10,12 @@ Tab {
         id: greenLinePage
         visible: true
 
+        // Always begin by loading the selected stop.
+        Component.onCompleted: {
+            activityIndicator.running = true
+            queryStopTimesWorker.sendMessage({'stop': slugify(greenLineModel.get(stopSelector.selectedIndex).name)})
+        }
+
         WorkerScript {
             id: queryStopTimesWorker
             source: "../js/gettimes.js"
