@@ -1,20 +1,77 @@
 
-WorkerScript.onMessage = function(message) {
-    var stopName = message.stop;
+WorkerScript.onMessage = function(sentMessage) {
+    var stopName = sentMessage.stop;
     var xmlHttp = new XMLHttpRequest();
     var msg;
     var parsedMsg;
-    var stopTimes = [];
+    var inboundTrams = [];
+    var outboundTrams = [];
+    var serviceMessage;
+    var stopInfo = [];
 
-    // Create two dimensional array. The first dimension will be the stop name. The second will be the stop time.
-    for (var i = 0; i < stopTimes.length; i++) {
-        stopTimes[i] = [];
-    }
+    var stopCodes = {
+        // Red Line
+        "The Point": "TPT",
+        "Spencer Dock": "SDK",
+        "Mayor Square - NCI": "MYS",
+        "George's Dock": "GDK",
+        "Connolly": "CON",
+        "Busáras": "BUS",
+        "Abbey Street": "ABB",
+        "Jervis": "JER",
+        "Four Courts": "FOU",
+        "Smithfield": "SMI",
+        "Museum": "MUS",
+        "Heuston": "HEU",
+        "James's": "JAM",
+        "Fatima": "FAT",
+        "Rialto": "RIA",
+        "Suir Road": "SUI",
+        "Goldenbridge": "GOL",
+        "Drimnagh": "DRI",
+        "Blackhorse": "BLA",
+        "Bluebell": "BLU",
+        "Kylemore": "KYL",
+        "Red Cow": "RED",
+        "Kingswood": "KIN",
+        "Belgard": "BEL",
+        "Cookstown": "COO",
+        "Hospital": "HOS",
+        "Tallaght": "TAL",
+        "Fettercairn": "FET",
+        "Cheeverstown": "CVN",
+        "Citywest Campus": "CIT",
+        "Fortunestown": "FOR",
+        "Saggart": "SAG",
 
-    // Query a hosted Luas API script. Returns JSON object of times for the given stop.
+        // Green Line
+        "St. Stephen's Green": "STS",
+        "Harcourt": "HAR",
+        "Charlemont": "CHA",
+        "Ranelagh": "RAN",
+        "Beechwood": "BEE",
+        "Cowper": "COW",
+        "Milltown": "MIL",
+        "Windy Arbour": "WIN",
+        "Dundrum": "DUN",
+        "Balally": "BAL",
+        "Kilmacud": "KIL",
+        "Stillorgan": "STI",
+        "Sandyford": "SAN",
+        "Central Park": "CPK",
+        "Glencairn": "GLE",
+        "The Gallops": "GAL",
+        "Leopardstown Valley": "LEO",
+        "Ballyogan Wood": "BAW",
+        "Carrickmines": "CCK",
+        "Laughanstown": "LAU",
+        "Cherrywood": "CHE",
+        "Brides Glen": "BRI"
+    };
+
+    // Query a hosted Luas API script. Returns JSON object with service message and times for the given stop.
     // API can be found here: https://github.com/ncremins/luas-api
-    // Note: Currently using v1 of the this API. Will be updated to use v2 in a future release.
-    xmlHttp.open("GET", "http://ks3290596.kimsufi.com/luas-api.php?action=gettimes&station=" + stopName, true);
+    xmlHttp.open("GET", "http://ks3290596.kimsufi.com/luas-api.php?action=times&station=" + stopCodes[stopName], true);
     xmlHttp.send(null);
 
     xmlHttp.onreadystatechange = function() {
@@ -22,56 +79,87 @@ WorkerScript.onMessage = function(message) {
             msg = xmlHttp.responseText;
         }
 
+        // Parse response text to usable object.
         parsedMsg = eval("(" + msg + ")");
 
         if (typeof parsedMsg != "undefined") {
-            // First, ensure both inbound and outbound arrays are of length 3.
-            while (parsedMsg.inbound.length < 3) {
-                parsedMsg.inbound.push("");
-            }
+            // Ensure that service message is available.
+            if (parsedMsg.hasOwnProperty("message"))
+                serviceMessage = parsedMsg.message;
+            else
+                serviceMessage = "";
 
-            while (parsedMsg.outbound.length < 3) {
-                parsedMsg.outbound.push("");
-            }
+            // Ensure that tram times are available.
+            if (parsedMsg.hasOwnProperty("trams")) {
+                for (var i = 0; i < parsedMsg.trams.length; i++) {
+                    if (parsedMsg.trams[i].direction === "Inbound")
+                        inboundTrams.push(parsedMsg.trams[i]);
 
-            // Then, append "min" or "mins" to time.
-            for (var i = 0; i < parsedMsg.inbound.length; i++) {
-                if (parsedMsg.inbound[i].time !== "DUE") {
-                    if (parsedMsg.inbound[i].time !== "1")
-                        parsedMsg.inbound[i].time += " mins";
-                    else
-                        parsedMsg.inbound[i].time += " min";
+                    if (parsedMsg.trams[i].direction === "Outbound")
+                        outboundTrams.push(parsedMsg.trams[i]);
+                }
+
+                // Ensure that both inbound and outbound arrays are of length 3.
+                while (inboundTrams.length < 3) {
+                    inboundTrams.push("");
+                }
+
+                while (outboundTrams.length < 3) {
+                    outboundTrams.push("");
+                }
+
+                // Append "min" or "mins" to time.
+                for (var i = 0; i < inboundTrams.length; i++) {
+                    if (inboundTrams[i].dueMinutes !== "DUE") {
+                        if (parseInt(inboundTrams[i].dueMinutes) > 1)
+                            inboundTrams[i].dueMinutes += " mins";
+                        else if (parseInt(inboundTrams[i].dueMinutes) === 1)
+                            inboundTrams[i].dueMinutes += " min";
+                    }
+                }
+
+                for (var i = 0; i < outboundTrams.length; i++) {
+                    if (outboundTrams[i].dueMinutes !== "DUE") {
+                        if (parseInt(outboundTrams[i].dueMinutes) > 1)
+                            outboundTrams[i].dueMinutes += " mins";
+                        else if (parseInt(outboundTrams[i].dueMinutes) === 1)
+                            outboundTrams[i].dueMinutes += " min";
+                    }
+                }
+
+                // Compile all stop times and add to stop info array, replacing undefined times with empty strings.
+                // Note: As there will always be 6 stop times, outbound times are offset by 3.
+                for (var i = 0; i < 3; i++) {
+                    stopInfo[i] = [inboundTrams[i].destination, inboundTrams[i].dueMinutes];
+
+                    if (typeof stopInfo[i][0] == "undefined")
+                        stopInfo[i][0] = "";
+                    if (typeof stopInfo[i][1] == "undefined")
+                        stopInfo[i][1] = "";
+
+                    stopInfo[i+3] = [outboundTrams[i].destination, outboundTrams[i].dueMinutes];
+
+                    if (typeof stopInfo[i+3][0] == "undefined")
+                        stopInfo[i+3][0] = "";
+                    if (typeof stopInfo[i+3][1] == "undefined")
+                        stopInfo[i+3][1] = "";
+                }
+            }
+            // If tram times are not present in returned API message, the RTPI system may be down.
+            // Display service message in Message box, along with personal error message.
+            else {
+                stopInfo[0] = ["Error retrieving times from Luas RTPI system.", ""];
+                stopInfo[1] = ["See <b>Message</b> box above for more information.", ""];
+
+                // Populate array with empty strings.
+                for (var i = 2; i < 6; i++) {
+                    stopInfo[i] = ["", ""];
                 }
             }
 
-            for (var i = 0; i < parsedMsg.outbound.length; i++) {
-                if (parsedMsg.outbound[i].time !== "DUE") {
-                    if (parsedMsg.outbound[i].time !== "1")
-                        parsedMsg.outbound[i].time += " mins";
-                    else
-                        parsedMsg.outbound[i].time += " min";
-                }
-            }
+            stopInfo[6] = serviceMessage;
 
-            // Finally, compile an array of stop times, replacing undefined times with empty strings.
-            // Note: As stopTimes is always defined with length 6, outbound times are offset by 3.
-            for (var i = 0; i < 3; i++) {
-                stopTimes[i] = [parsedMsg.inbound[i].dest, parsedMsg.inbound[i].time];
-
-                if (typeof stopTimes[i][0] == "undefined")
-                    stopTimes[i][0] = "";
-                if (typeof stopTimes[i][1] == "undefined")
-                    stopTimes[i][1] = "";
-
-                stopTimes[i+3] = [parsedMsg.outbound[i].dest, parsedMsg.outbound[i].time];
-
-                if (typeof stopTimes[i+3][0] == "undefined")
-                    stopTimes[i+3][0] = "";
-                if (typeof stopTimes[i+3][1] == "undefined")
-                    stopTimes[i+3][1] = "";
-            }
-
-            WorkerScript.sendMessage({'reply': stopTimes});
+            WorkerScript.sendMessage({'reply': stopInfo});
         }
     }
 }

@@ -12,7 +12,7 @@ Tab {
         // Always begin by loading the selected stop.
         Component.onCompleted: {
             activityIndicator.running = true
-            queryStopTimesWorker.sendMessage({'stop': slugify(greenLineModel.get(stopSelector.selectedIndex).name)})
+            queryStopTimesWorker.sendMessage({'stop': greenLineModel.get(stopSelector.selectedIndex).name})
         }
 
         WorkerScript {
@@ -34,6 +34,11 @@ Tab {
                 outboundStop3Name.text = String(getArray(messageObject.reply)[5][0])
                 outboundStop3Time.text = String(getArray(messageObject.reply)[5][1])
 
+                if (String(getArray(messageObject.reply)[6]) !== "All services operating normally")
+                    messageTitle.color = "red";
+
+                messageContentLabel.text = String(getArray(messageObject.reply)[6])
+
                 activityIndicator.running = false
             }
         }
@@ -52,17 +57,22 @@ Tab {
                 LayoutMirroring.enabled: true
             }
 
-            ListItem.ItemSelector {
+            OptionSelector {
                 id: stopSelector
                 text: "<h2>Select Stop:</h2>"
-                containerHeight: units.gu(25)
-                expanded: true
+                containerHeight: units.gu(21.5)
+                expanded: false
                 model: greenLineModel
-                delegate: OptionSelectorDelegate { text: name; subText: description; icon: image }
+
+                delegate: OptionSelectorDelegate {
+                    text: name
+                    subText: description
+                    icon: image
+                }
 
                 onSelectedIndexChanged: {
                     activityIndicator.running = true
-                    queryStopTimesWorker.sendMessage({'stop': slugify(greenLineModel.get(stopSelector.selectedIndex).name)})
+                    queryStopTimesWorker.sendMessage({'stop': greenLineModel.get(stopSelector.selectedIndex).name})
                 }
             }
 
@@ -93,6 +103,46 @@ Tab {
             }
 
             UbuntuShape {
+                id: messageTitle
+                width: parent.width
+                height: units.gu(3)
+                radius: "medium"
+                color: "green"
+
+                anchors {
+                    top: stopSelector.bottom
+                    topMargin: units.gu(2)
+                }
+
+                Label {
+                    text: "<b>Message</b>"
+                    color: "white"
+
+                    anchors.centerIn: parent
+                }
+            }
+
+            UbuntuShape {
+                id: messageContent
+                width: parent.width
+                height: units.gu(3)
+                color: "white"
+
+                anchors {
+                    top: messageTitle.bottom
+                }
+
+                Label {
+                    id: messageContentLabel
+                    width: parent.width - 12
+                    wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                    onTextChanged: messageContent.height = messageContentLabel.height + 6
+
+                    anchors.centerIn: parent
+                }
+            }
+
+            UbuntuShape {
                 id: inbound
                 width: parent.width
                 height: units.gu(3)
@@ -100,7 +150,7 @@ Tab {
                 color: "#100054"
 
                 anchors {
-                    top: stopSelector.bottom
+                    top: messageContent.bottom
                     topMargin: units.gu(2)
                 }
 
@@ -126,8 +176,8 @@ Tab {
 
                 Label {
                     id: inboundStop1Name
-                    text: ""
                     width: parent.width / 2
+
                     anchors.leftMargin: 6
                     x: parent.x + 6
                     y: parent.x + 5
@@ -135,7 +185,7 @@ Tab {
 
                 Label {
                     id: inboundStop1Time
-                    text: ""
+
                     anchors.left: inboundStop1Name.right
                     y: parent.x + 5
                 }
@@ -155,8 +205,8 @@ Tab {
 
                 Label {
                     id: inboundStop2Name
-                    text: ""
                     width: parent.width / 2
+
                     anchors.leftMargin: 6
                     x: parent.x + 6
                     y: parent.x + 5
@@ -164,7 +214,7 @@ Tab {
 
                 Label {
                     id: inboundStop2Time
-                    text: ""
+
                     anchors.left: inboundStop2Name.right
                     y: parent.x + 5
                 }
@@ -184,8 +234,8 @@ Tab {
 
                 Label {
                     id: inboundStop3Name
-                    text: ""
                     width: parent.width / 2
+
                     anchors.leftMargin: 6
                     x: parent.x + 6
                     y: parent.x + 5
@@ -193,7 +243,7 @@ Tab {
 
                 Label {
                     id: inboundStop3Time
-                    text: ""
+
                     anchors.left: inboundStop3Name.right
                     y: parent.x + 5
                 }
@@ -233,8 +283,8 @@ Tab {
 
                 Label {
                     id: outboundStop1Name
-                    text: ""
                     width: parent.width / 2
+
                     anchors.leftMargin: 6
                     x: parent.x + 6
                     y: parent.x + 5
@@ -242,7 +292,7 @@ Tab {
 
                 Label {
                     id: outboundStop1Time
-                    text: ""
+
                     anchors.left: outboundStop1Name.right
                     y: parent.x + 5
                 }
@@ -262,8 +312,8 @@ Tab {
 
                 Label {
                     id: outboundStop2Name
-                    text: ""
                     width: parent.width / 2
+
                     anchors.leftMargin: 6
                     x: parent.x + 6
                     y: parent.x + 5
@@ -271,7 +321,7 @@ Tab {
 
                 Label {
                     id: outboundStop2Time
-                    text: ""
+
                     anchors.left: outboundStop2Name.right
                     y: parent.x + 5
                 }
@@ -291,8 +341,8 @@ Tab {
 
                 Label {
                     id: outboundStop3Name
-                    text: ""
                     width: parent.width / 2
+
                     anchors.leftMargin: 6
                     x: parent.x + 6
                     y: parent.x + 5
@@ -300,7 +350,7 @@ Tab {
 
                 Label {
                     id: outboundStop3Time
-                    text: ""
+
                     anchors.left: outboundStop3Name.right
                     y: parent.x + 5
                 }
