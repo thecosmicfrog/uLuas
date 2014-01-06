@@ -34,7 +34,9 @@ Tab {
                 outboundStop3Name.text = String(getArray(messageObject.reply)[5][0])
                 outboundStop3Time.text = String(getArray(messageObject.reply)[5][1])
 
-                if (String(getArray(messageObject.reply)[6]) !== "All services operating normally")
+                if (String(getArray(messageObject.reply)[6]) === "All services operating normally")
+                    messageTitle.color = "#006600";
+                else
                     messageTitle.color = "red";
 
                 messageContentLabel.text = String(getArray(messageObject.reply)[6])
