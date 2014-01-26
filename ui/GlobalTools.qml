@@ -21,8 +21,8 @@ ToolbarItems {
 
             Label {
                 text: "<p>Real-time tram stop information for Dublin's Luas light rail service.</p><br>
-                       <p><a href=\"https://www.github.com/thecosmicfrog/uluas\">
-                       https://www.github.com/thecosmicfrog/uluas</a></p>"
+                       <p><a href=\"http://uluas.thecosmicfrog.org\">
+                       http://uluas.thecosmicfrog.org</a></p>"
                 wrapMode: Text.WordWrap
 
                 onLinkActivated: {

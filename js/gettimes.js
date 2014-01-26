@@ -146,10 +146,17 @@ WorkerScript.onMessage = function(sentMessage) {
                 }
             }
             // If tram times are not present in returned API message, the RTPI system may be down.
-            // Display service message in Message box, along with personal error message.
+            // We assume that a lack of times coupled with a non-standard service message represents a system outage.
+            // Otherwise, the tram service has probably stopped running for the day.
             else {
-                stopInfo[0] = ["Error retrieving times from Luas RTPI system.", ""];
-                stopInfo[1] = ["See <b>Message</b> box above for more information.", ""];
+                if (serviceMessage === "All services operating normally") {
+                    stopInfo[0] = ["<b>No trams forecast</b>", ""];
+                    stopInfo[1] = ["", ""];
+                }
+                else {
+                    stopInfo[0] = ["Error retrieving times from Luas RTPI system.", ""];
+                    stopInfo[1] = ["See <b>Message</b> box above for more information.", ""];
+                }
 
                 // Populate array with empty strings.
                 for (var i = 2; i < 6; i++) {

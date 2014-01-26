@@ -12,6 +12,7 @@ Tab {
         // Always begin by loading the selected stop.
         Component.onCompleted: {
             activityIndicator.running = true
+            stopSelector.selectedIndex = getLastStopIndex(redLineLastStop.contents.stopName, redLineModel)
             queryStopTimesWorker.sendMessage({'stop': redLineModel.get(stopSelector.selectedIndex).name})
         }
 
@@ -35,11 +36,11 @@ Tab {
                 outboundStop3Time.text = String(getArray(messageObject.reply)[5][1])
 
                 if (String(getArray(messageObject.reply)[6]) === "All services operating normally")
-                    messageTitle.color = "#006600";
+                    statusTitle.color = "#006600";
                 else
-                    messageTitle.color = "red";
+                    statusTitle.color = "red";
 
-                messageContentLabel.text = String(getArray(messageObject.reply)[6])
+                statusContentLabel.text = String(getArray(messageObject.reply)[6])
 
                 activityIndicator.running = false
             }
@@ -75,6 +76,9 @@ Tab {
                 onSelectedIndexChanged: {
                     activityIndicator.running = true
                     queryStopTimesWorker.sendMessage({'stop': redLineModel.get(stopSelector.selectedIndex).name})
+
+                    // Save stop to U1DB backend for faster access on next app start.
+                    redLineLastStop.contents = {stopName: redLineModel.get(stopSelector.selectedIndex).name}
                 }
             }
 
@@ -115,7 +119,7 @@ Tab {
             }
 
             UbuntuShape {
-                id: messageTitle
+                id: statusTitle
                 width: parent.width
                 height: units.gu(3)
                 radius: "medium"
@@ -127,7 +131,7 @@ Tab {
                 }
 
                 Label {
-                    text: "<b>Message</b>"
+                    text: "<b>Status</b>"
                     color: "white"
 
                     anchors.centerIn: parent
@@ -135,20 +139,20 @@ Tab {
             }
 
             UbuntuShape {
-                id: messageContent
+                id: statusContent
                 width: parent.width
                 height: units.gu(3)
                 color: "white"
 
                 anchors {
-                    top: messageTitle.bottom
+                    top: statusTitle.bottom
                 }
 
                 Label {
-                    id: messageContentLabel
+                    id: statusContentLabel
                     width: parent.width - 12
                     wrapMode: Text.WrapAtWordBoundaryOrAnywhere
-                    onTextChanged: messageContent.height = messageContentLabel.height + 6
+                    onTextChanged: statusContent.height = statusContentLabel.height + 6
 
                     anchors.centerIn: parent
                 }
@@ -162,7 +166,7 @@ Tab {
                 color: "#100054"
 
                 anchors {
-                    top: messageContent.bottom
+                    top: statusContent.bottom
                     topMargin: units.gu(2)
                 }
 
@@ -370,6 +374,16 @@ Tab {
         }
 
         tools: GlobalTools {
+            ToolbarButton {
+                id: reloadButton
+
+                text: "Reload"
+                iconSource: "../img/reload.png"
+                onTriggered: {
+                    activityIndicator.running = true
+                    queryStopTimesWorker.sendMessage({'stop': redLineModel.get(stopSelector.selectedIndex).name})
+                }
+            }
         }
     }
 }
