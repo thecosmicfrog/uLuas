@@ -71,7 +71,7 @@ WorkerScript.onMessage = function(sentMessage) {
 
     // Query a hosted Luas API script. Returns JSON object with service message and times for the given stop.
     // API can be found here: https://github.com/ncremins/luas-api
-    xmlHttp.open("GET", "http://ks3290596.kimsufi.com/luas-api-v2/luas-api.php?action=times&station=" + stopCodes[stopName], true);
+    xmlHttp.open("GET", "http://uluas-times.thecosmicfrog.org/luas-api-v2/luas-api.php?action=times&station=BLA/luas-api-v2/luas-api.php?action=times&station=" + stopCodes[stopName], true);
     xmlHttp.send(null);
 
     xmlHttp.onreadystatechange = function() {
