@@ -77,96 +77,96 @@ WorkerScript.onMessage = function(sentMessage) {
     xmlHttp.onreadystatechange = function() {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
             msg = xmlHttp.responseText;
-        }
 
-        // Parse response text to usable object.
-        parsedMsg = eval("(" + msg + ")");
+            // Parse response text to usable object.
+            parsedMsg = JSON.parse(msg);
 
-        if (typeof parsedMsg != "undefined") {
-            // Ensure that service message is available.
-            if (parsedMsg.hasOwnProperty("message"))
-                serviceMessage = parsedMsg.message;
-            else
-                serviceMessage = "";
+            if (typeof parsedMsg != "undefined") {
+                // Ensure that service message is available.
+                if (parsedMsg.hasOwnProperty("message"))
+                    serviceMessage = parsedMsg.message;
+                else
+                    serviceMessage = "";
 
-            // Ensure that tram times are available.
-            if (parsedMsg.hasOwnProperty("trams")) {
-                for (var i = 0; i < parsedMsg.trams.length; i++) {
-                    if (parsedMsg.trams[i].direction === "Inbound")
-                        inboundTrams.push(parsedMsg.trams[i]);
+                // Ensure that tram times are available.
+                if (parsedMsg.hasOwnProperty("trams")) {
+                    for (var i = 0; i < parsedMsg.trams.length; i++) {
+                        if (parsedMsg.trams[i].direction === "Inbound")
+                            inboundTrams.push(parsedMsg.trams[i]);
 
-                    if (parsedMsg.trams[i].direction === "Outbound")
-                        outboundTrams.push(parsedMsg.trams[i]);
-                }
+                        if (parsedMsg.trams[i].direction === "Outbound")
+                            outboundTrams.push(parsedMsg.trams[i]);
+                    }
 
-                // Ensure that both inbound and outbound arrays are of length 3.
-                while (inboundTrams.length < 3) {
-                    inboundTrams.push("");
-                }
+                    // Ensure that both inbound and outbound arrays are of length 3.
+                    while (inboundTrams.length < 3) {
+                        inboundTrams.push("");
+                    }
 
-                while (outboundTrams.length < 3) {
-                    outboundTrams.push("");
-                }
+                    while (outboundTrams.length < 3) {
+                        outboundTrams.push("");
+                    }
 
-                // Append "min" or "mins" to time.
-                for (var i = 0; i < inboundTrams.length; i++) {
-                    if (inboundTrams[i].dueMinutes !== "DUE") {
-                        if (parseInt(inboundTrams[i].dueMinutes) > 1)
-                            inboundTrams[i].dueMinutes += " mins";
-                        else if (parseInt(inboundTrams[i].dueMinutes) === 1)
-                            inboundTrams[i].dueMinutes += " min";
+                    // Append "min" or "mins" to time.
+                    for (var i = 0; i < inboundTrams.length; i++) {
+                        if (inboundTrams[i].dueMinutes !== "DUE") {
+                            if (parseInt(inboundTrams[i].dueMinutes) > 1)
+                                inboundTrams[i].dueMinutes += " mins";
+                            else if (parseInt(inboundTrams[i].dueMinutes) === 1)
+                                inboundTrams[i].dueMinutes += " min";
+                        }
+                    }
+
+                    for (var i = 0; i < outboundTrams.length; i++) {
+                        if (outboundTrams[i].dueMinutes !== "DUE") {
+                            if (parseInt(outboundTrams[i].dueMinutes) > 1)
+                                outboundTrams[i].dueMinutes += " mins";
+                            else if (parseInt(outboundTrams[i].dueMinutes) === 1)
+                                outboundTrams[i].dueMinutes += " min";
+                        }
+                    }
+
+                    // Compile all stop times and add to stop info array, replacing undefined times with empty strings.
+                    // Note: As there will always be 6 stop times, outbound times are offset by 3.
+                    for (var i = 0; i < 3; i++) {
+                        stopInfo[i] = [inboundTrams[i].destination, inboundTrams[i].dueMinutes];
+
+                        if (typeof stopInfo[i][0] == "undefined")
+                            stopInfo[i][0] = "";
+                        if (typeof stopInfo[i][1] == "undefined")
+                            stopInfo[i][1] = "";
+
+                        stopInfo[i+3] = [outboundTrams[i].destination, outboundTrams[i].dueMinutes];
+
+                        if (typeof stopInfo[i+3][0] == "undefined")
+                            stopInfo[i+3][0] = "";
+                        if (typeof stopInfo[i+3][1] == "undefined")
+                            stopInfo[i+3][1] = "";
                     }
                 }
-
-                for (var i = 0; i < outboundTrams.length; i++) {
-                    if (outboundTrams[i].dueMinutes !== "DUE") {
-                        if (parseInt(outboundTrams[i].dueMinutes) > 1)
-                            outboundTrams[i].dueMinutes += " mins";
-                        else if (parseInt(outboundTrams[i].dueMinutes) === 1)
-                            outboundTrams[i].dueMinutes += " min";
-                    }
-                }
-
-                // Compile all stop times and add to stop info array, replacing undefined times with empty strings.
-                // Note: As there will always be 6 stop times, outbound times are offset by 3.
-                for (var i = 0; i < 3; i++) {
-                    stopInfo[i] = [inboundTrams[i].destination, inboundTrams[i].dueMinutes];
-
-                    if (typeof stopInfo[i][0] == "undefined")
-                        stopInfo[i][0] = "";
-                    if (typeof stopInfo[i][1] == "undefined")
-                        stopInfo[i][1] = "";
-
-                    stopInfo[i+3] = [outboundTrams[i].destination, outboundTrams[i].dueMinutes];
-
-                    if (typeof stopInfo[i+3][0] == "undefined")
-                        stopInfo[i+3][0] = "";
-                    if (typeof stopInfo[i+3][1] == "undefined")
-                        stopInfo[i+3][1] = "";
-                }
-            }
-            // If tram times are not present in returned API message, the RTPI system may be down.
-            // We assume that a lack of times coupled with a non-standard service message represents a system outage.
-            // Otherwise, the tram service has probably stopped running for the day.
-            else {
-                if (serviceMessage === "All services operating normally") {
-                    stopInfo[0] = ["<b>No trams forecast</b>", ""];
-                    stopInfo[1] = ["", ""];
-                }
+                // If tram times are not present in returned API message, the RTPI system may be down.
+                // We assume that a lack of times coupled with a non-standard service message represents a system outage.
+                // Otherwise, the tram service has probably stopped running for the day.
                 else {
-                    stopInfo[0] = ["Error retrieving times from Luas RTPI system.", ""];
-                    stopInfo[1] = ["See <b>Message</b> box above for more information.", ""];
+                    if (serviceMessage === "All services operating normally") {
+                        stopInfo[0] = ["<b>No trams forecast</b>", ""];
+                        stopInfo[1] = ["", ""];
+                    }
+                    else {
+                        stopInfo[0] = ["Error retrieving times from Luas RTPI system.", ""];
+                        stopInfo[1] = ["See <b>Message</b> box above for more information.", ""];
+                    }
+
+                    // Populate array with empty strings.
+                    for (var i = 2; i < 6; i++) {
+                        stopInfo[i] = ["", ""];
+                    }
                 }
 
-                // Populate array with empty strings.
-                for (var i = 2; i < 6; i++) {
-                    stopInfo[i] = ["", ""];
-                }
+                stopInfo[6] = serviceMessage;
+
+                WorkerScript.sendMessage({'reply': stopInfo});
             }
-
-            stopInfo[6] = serviceMessage;
-
-            WorkerScript.sendMessage({'reply': stopInfo});
         }
     }
 }
