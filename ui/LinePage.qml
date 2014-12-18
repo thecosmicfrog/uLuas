@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Ubuntu.Components 1.1
 import Ubuntu.Components.ListItems 0.1 as ListItem
+import Ubuntu.Components.Popups 0.1
 
 Page {
     id: linePage
@@ -53,6 +54,40 @@ Page {
 
             activityIndicator.running = false
         }
+    }
+
+    head.actions: [
+        Action {
+            id: reloadAction
+
+            iconName: "reload"
+            text: "Reload"
+
+            onTriggered: {
+                activityIndicator.running = true
+                queryStopTimesWorker.sendMessage({'stop': lineModel.get(stopSelector.selectedIndex).name})
+            }
+        },
+        Action {
+            id: aboutAction
+
+            iconName: "help"
+            text: "About"
+
+            onTriggered: PopupUtils.open(aboutPopover)
+        },
+        Action {
+            id: settingsAction
+
+            iconName: "settings"
+            text: "Settings"
+
+            onTriggered: PopupUtils.open(aboutPopover)
+        }
+    ]
+
+    AboutPopover {
+        id: aboutPopover
     }
 
     Item {
@@ -411,16 +446,16 @@ Page {
         ListElement { name: "Brides Glen"; description: ""; image: "../img/blank.png" }
     }
 
-    tools: GlobalTools {
-        ToolbarButton {
-            id: reloadButton
+//    tools: GlobalTools {
+//        ToolbarButton {
+//            id: reloadButton
 
-            text: "Reload"
-            iconSource: "../img/reload.png"
-            onTriggered: {
-                activityIndicator.running = true
-                queryStopTimesWorker.sendMessage({'stop': lineModel.get(stopSelector.selectedIndex).name})
-            }
-        }
-    }
+//            text: "Reload"
+//            iconSource: "../img/reload.png"
+//            onTriggered: {
+//                activityIndicator.running = true
+//                queryStopTimesWorker.sendMessage({'stop': lineModel.get(stopSelector.selectedIndex).name})
+//            }
+//        }
+//    }
 }

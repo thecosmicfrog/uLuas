@@ -10,7 +10,7 @@ MainView {
 
     //automaticOrientation: true
 
-    width: units.gu(44)
+    width: units.gu(45)
     height: units.gu(68)
 
     function getArray(obj) {
@@ -58,15 +58,23 @@ MainView {
        }
     }
 
-    Tabs {
-        id: tabs
+    PageStack {
+        id: pageStack
 
-        RedLineTab {
-            objectName: "redLineTab"
-        }
+        anchors.fill: parent
 
-        GreenLineTab {
-            objectName: "greenLineTab"
+        Component.onCompleted: push(tabs)
+
+        Tabs {
+            id: tabs
+
+            RedLineTab {
+                objectName: "redLineTab"
+            }
+
+            GreenLineTab {
+                objectName: "greenLineTab"
+            }
         }
     }
 }
