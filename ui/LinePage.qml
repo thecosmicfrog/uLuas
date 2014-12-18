@@ -12,13 +12,19 @@ Page {
     Component.onCompleted: {
         // For each tab, load the appropriate model and U1DB database.
         if (parent.objectName === "redLineTab") {
-            lineModel = redLineModel;
-            lastStop = redLineLastStop;
+            lineModel = redLineModel
+            lastStop = redLineLastStop
         }
         else if (parent.objectName === "greenLineTab") {
-            lineModel = greenLineModel;
-            lastStop = greenLineLastStop;
+            lineModel = greenLineModel
+            lastStop = greenLineLastStop
         }
+
+        // Start by loading the tab based on the user's selected default line.
+        if (defaultLine.contents.lineName === "Green Line")
+            tabs.selectedTabIndex = 1
+        else
+            tabs.selectedTabIndex = 0
 
         // Always begin by loading the selected stop.
         activityIndicator.running = true
@@ -69,18 +75,18 @@ Page {
             }
         },
         Action {
-            id: aboutAction
-
-            iconName: "help"
-            text: "About"
-
-            onTriggered: PopupUtils.open(aboutPopover)
-        },
-        Action {
             id: settingsAction
 
             iconName: "settings"
             text: "Settings"
+
+            onTriggered: pageStack.push(Qt.resolvedUrl("SettingsPage.qml"))
+        },
+        Action {
+            id: aboutAction
+
+            iconName: "help"
+            text: "About"
 
             onTriggered: PopupUtils.open(aboutPopover)
         }
@@ -445,17 +451,4 @@ Page {
         ListElement { name: "Cherrywood"; description: ""; image: "../img/blank.png" }
         ListElement { name: "Brides Glen"; description: ""; image: "../img/blank.png" }
     }
-
-//    tools: GlobalTools {
-//        ToolbarButton {
-//            id: reloadButton
-
-//            text: "Reload"
-//            iconSource: "../img/reload.png"
-//            onTriggered: {
-//                activityIndicator.running = true
-//                queryStopTimesWorker.sendMessage({'stop': lineModel.get(stopSelector.selectedIndex).name})
-//            }
-//        }
-//    }
 }

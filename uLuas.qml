@@ -39,6 +39,16 @@ MainView {
     }
 
     U1db.Document {
+        id: defaultLine
+        database: db
+        docId: "defaultLine"
+        create: true
+        defaults: {
+            lineName: "Red Line"
+        }
+    }
+
+    U1db.Document {
        id: redLineLastStop
        database: db
        docId: "redLineLastStop"

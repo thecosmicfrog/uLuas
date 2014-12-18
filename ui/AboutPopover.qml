@@ -63,6 +63,7 @@ Component {
                         }
 
                         text: "uLuas logo by Sam Hewitt (<a href=\"http://snwh.org\">snwh</a>)"
+                        color: "#000000"
 
                         onLinkActivated: Qt.openUrlExternally(link)
                     }
