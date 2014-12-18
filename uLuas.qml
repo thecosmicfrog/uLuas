@@ -4,7 +4,10 @@ import U1db 1.0 as U1db
 import "ui"
 
 MainView {
+    id: mainView
+
     applicationName: "org.thecosmicfrog.uluas"
+    property string version: "0.21"
 
     useDeprecatedToolbar: false
 

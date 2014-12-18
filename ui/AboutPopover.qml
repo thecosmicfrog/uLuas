@@ -18,7 +18,7 @@ Component {
             }
 
             ListItem.Header {
-                text: "uLuas"
+                text: "uLuas\tv" + version
             }
 
             ListItem.Standard {
