@@ -22,23 +22,6 @@ Component {
             }
 
             ListItem.Standard {
-                text: "Written by Aaron Hastings (thecosmicfrog)"
-
-                onClicked: Qt.openUrlExternally("https://github.com/thecosmicfrog")
-            }
-
-            ListItem.Standard {
-                text: "License: GNU GPLv3"
-            }
-
-            ListItem.Standard {
-                text: "Source code, bugs and feature requests:<br>
-                       <a href=\"https://github.com/thecosmicfrog/uLuas\">github.com/thecosmicfrog/uLuas</a>"
-
-                onClicked: Qt.openUrlExternally("https://github.com/thecosmicfrog/uLuas")
-            }
-
-            ListItem.Standard {
                 Item {
                     anchors.fill: parent
 
@@ -68,6 +51,23 @@ Component {
                         onLinkActivated: Qt.openUrlExternally(link)
                     }
                 }
+            }
+
+            ListItem.Standard {
+                text: "Written by Aaron Hastings (thecosmicfrog)"
+
+                onClicked: Qt.openUrlExternally("https://github.com/thecosmicfrog")
+            }
+
+            ListItem.Standard {
+                text: "License: GNU GPLv3"
+            }
+
+            ListItem.Standard {
+                text: "Source code, bugs and feature requests:<br>
+                       <a href=\"https://github.com/thecosmicfrog/uLuas\">github.com/thecosmicfrog/uLuas</a>"
+
+                onClicked: Qt.openUrlExternally("https://github.com/thecosmicfrog/uLuas")
             }
 
             ListItem.SingleControl {
