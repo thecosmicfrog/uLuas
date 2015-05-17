@@ -7,7 +7,7 @@ MainView {
     id: mainView
 
     applicationName: "org.thecosmicfrog.uluas"
-    property string version: "0.22"
+    property string version: "0.23"
 
     useDeprecatedToolbar: false
 

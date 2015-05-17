@@ -51,7 +51,7 @@ Page {
             outboundStop3Name.text = String(getArray(messageObject.reply)[5][0])
             outboundStop3Time.text = String(getArray(messageObject.reply)[5][1])
 
-            if (String(getArray(messageObject.reply)[6]) === "All services operating normally")
+            if (String(getArray(messageObject.reply)[6]).indexOf("operating normally") > -1)
                 statusTitle.color = "#006600";
             else
                 statusTitle.color = "red";
@@ -194,7 +194,6 @@ Page {
 
             Label {
                 id: statusContentLabel
-                width: parent.width - 12
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
                 onTextChanged: statusContent.height = statusContentLabel.height + 6
 
@@ -237,20 +236,29 @@ Page {
             radius: "medium"
             color: "white"
 
-            Label {
-                id: inboundStop1Name
-                width: parent.width / 2
+            Row {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
-                anchors.leftMargin: 6
-                x: parent.x + 6
-                y: parent.x + 5
-            }
+                Label {
+                    id: inboundStop1Name
+                    width: parent.width / 2
 
-            Label {
-                id: inboundStop1Time
+                    x: parent.width / 8
+                    y: parent.x + 5
+                }
 
-                anchors.left: inboundStop1Name.right
-                y: parent.x + 5
+                Label {
+                    id: inboundStop1Time
+                    width: parent.width / 2
+
+                    anchors.left: inboundStop1Name.right
+                    y: parent.x + 5
+                }
             }
         }
 
@@ -261,20 +269,29 @@ Page {
             radius: "medium"
             color: "white"
 
-            Label {
-                id: inboundStop2Name
-                width: parent.width / 2
+            Row {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
-                anchors.leftMargin: 6
-                x: parent.x + 6
-                y: parent.x + 5
-            }
+                Label {
+                    id: inboundStop2Name
+                    width: parent.width / 2
 
-            Label {
-                id: inboundStop2Time
+                    x: parent.width / 8
+                    y: parent.x + 5
+                }
 
-                anchors.left: inboundStop2Name.right
-                y: parent.x + 5
+                Label {
+                    id: inboundStop2Time
+                    width: parent.width / 2
+
+                    anchors.left: inboundStop2Name.right
+                    y: parent.x + 5
+                }
             }
         }
 
@@ -285,20 +302,29 @@ Page {
             radius: "medium"
             color: "white"
 
-            Label {
-                id: inboundStop3Name
-                width: parent.width / 2
+            Row {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
-                anchors.leftMargin: 6
-                x: parent.x + 6
-                y: parent.x + 5
-            }
+                Label {
+                    id: inboundStop3Name
+                    width: parent.width / 2
 
-            Label {
-                id: inboundStop3Time
+                    x: parent.width / 8
+                    y: parent.x + 5
+                }
 
-                anchors.left: inboundStop3Name.right
-                y: parent.x + 5
+                Label {
+                    id: inboundStop3Time
+                    width: parent.width / 2
+
+                    anchors.left: inboundStop3Name.right
+                    y: parent.x + 5
+                }
             }
         }
 
@@ -324,20 +350,29 @@ Page {
             radius: "medium"
             color: "white"
 
-            Label {
-                id: outboundStop1Name
-                width: parent.width / 2
+            Row {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
-                anchors.leftMargin: 6
-                x: parent.x + 6
-                y: parent.x + 5
-            }
+                Label {
+                    id: outboundStop1Name
+                    width: parent.width / 2
 
-            Label {
-                id: outboundStop1Time
+                    x: parent.width / 8
+                    y: parent.x + 5
+                }
 
-                anchors.left: outboundStop1Name.right
-                y: parent.x + 5
+                Label {
+                    id: outboundStop1Time
+                    width: parent.width / 2
+
+                    anchors.left: outboundStop1Name.right
+                    y: parent.x + 5
+                }
             }
         }
 
@@ -348,20 +383,29 @@ Page {
             radius: "medium"
             color: "white"
 
-            Label {
-                id: outboundStop2Name
-                width: parent.width / 2
+            Row {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
-                anchors.leftMargin: 6
-                x: parent.x + 6
-                y: parent.x + 5
-            }
+                Label {
+                    id: outboundStop2Name
+                    width: parent.width / 2
 
-            Label {
-                id: outboundStop2Time
+                    x: parent.width / 8
+                    y: parent.x + 5
+                }
 
-                anchors.left: outboundStop2Name.right
-                y: parent.x + 5
+                Label {
+                    id: outboundStop2Time
+                    width: parent.width / 2
+
+                    anchors.left: outboundStop2Name.right
+                    y: parent.x + 5
+                }
             }
         }
 
@@ -372,20 +416,29 @@ Page {
             radius: "medium"
             color: "white"
 
-            Label {
-                id: outboundStop3Name
-                width: parent.width / 2
+            Row {
+                anchors {
+                    top: parent.top
+                    left: parent.left
+                    right: parent.right
+                    bottom: parent.bottom
+                }
 
-                anchors.leftMargin: 6
-                x: parent.x + 6
-                y: parent.x + 5
-            }
+                Label {
+                    id: outboundStop3Name
+                    width: parent.width / 2
 
-            Label {
-                id: outboundStop3Time
+                    x: parent.width / 8
+                    y: parent.x + 5
+                }
 
-                anchors.left: outboundStop3Name.right
-                y: parent.x + 5
+                Label {
+                    id: outboundStop3Time
+                    width: parent.width / 2
+
+                    anchors.left: outboundStop3Name.right
+                    y: parent.x + 5
+                }
             }
         }
     }
