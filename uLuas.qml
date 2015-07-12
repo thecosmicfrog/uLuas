@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import Ubuntu.Components 1.1
+import Ubuntu.Components 1.2
 import U1db 1.0 as U1db
 import "ui"
 
@@ -7,9 +7,7 @@ MainView {
     id: mainView
 
     applicationName: "org.thecosmicfrog.uluas"
-    property string version: "0.23"
-
-    useDeprecatedToolbar: false
+    property string version: "0.26"
 
     //automaticOrientation: true
 
