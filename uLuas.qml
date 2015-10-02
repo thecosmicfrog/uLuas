@@ -7,7 +7,7 @@ MainView {
     id: mainView
 
     applicationName: "org.thecosmicfrog.uluas"
-    property string version: "0.26"
+    property string version: "0.27"
 
     //automaticOrientation: true
 

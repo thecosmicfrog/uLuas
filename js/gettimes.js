@@ -68,9 +68,20 @@ WorkerScript.onMessage = function(sentMessage) {
         "Brides Glen": "BRI"
     };
 
-    // Query a hosted Luas API script. Returns JSON object with service message and times for the given stop.
-    // API can be found here: https://github.com/ncremins/luas-api
-    xmlHttp.open("GET", "https://api.thecosmicfrog.org/cgi-bin/luas-api.php?action=times&station=BLA/luas-api-v2/luas-api.php?action=times&station=" + stopCodes[stopName], true);
+    /*
+     * Randomly choose an API endpoint to query. This provides load balancing and redundancy
+     * in case of server failures.
+     * All API endpoints are of the form: "apiN.thecosmicfrog.org", where N is determined by
+     * the formula below.
+     * The constant NUM_API_ENDPOINTS governs how many endpoints there currently are.
+     */
+    var API_URL_PREFIX = "https://api";
+    var API_URL_POSTFIX = ".thecosmicfrog.org/cgi-bin/luas-api.php?action=times&station=";
+    var NUM_API_ENDPOINTS = 2;
+    var apiEndpointToQuery = Math.floor((Math.random() * NUM_API_ENDPOINTS + 1)).toString();
+    var apiUrl = API_URL_PREFIX + apiEndpointToQuery + API_URL_POSTFIX;
+
+    xmlHttp.open("GET", apiUrl + stopCodes[stopName], true);
     xmlHttp.send(null);
 
     xmlHttp.onreadystatechange = function() {
